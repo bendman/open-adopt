@@ -1,0 +1,42 @@
+{
+  "name": "open-adopt",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "~15.4.0",
+    "react-native": "0.41.2"
+  },
+  "devDependencies": {
+    "babel-jest": "18.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "jest": "18.1.0",
+    "react-test-renderer": "~15.4.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "description": "An open source pet adoption application built with React Native.",
+  "main": "index.ios.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bendman/open-adopt.git"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "javascript",
+    "pet",
+    "adoption",
+    "api"
+  ],
+  "author": "Ben Duncan <ben@cascadiaconcepts.com> (http://benduncan.me/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bendman/open-adopt/issues"
+  },
+  "homepage": "https://github.com/bendman/open-adopt#readme"
+}
