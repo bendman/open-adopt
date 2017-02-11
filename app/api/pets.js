@@ -1,6 +1,6 @@
 import fetch from './fetch';
 
-const formatInbound = (pet) => ({
+const formatInbound = pet => ({
   id: pet.id.$t,
   name: pet.name.$t,
   sex: pet.sex.$t,
@@ -11,7 +11,7 @@ const formatInbound = (pet) => ({
   // ensure these are always an array
   breeds: Array.isArray(pet.breeds.breed)
     ? pet.breeds.breed.map(breed => breed.$t)
-    : [ pet.breeds.breed.$t ],
+    : [pet.breeds.breed.$t],
   contact: {
     phone: pet.contact.phone.$t,
     email: pet.contact.email.$t,
@@ -19,20 +19,20 @@ const formatInbound = (pet) => ({
     city: pet.contact.city.$t,
     zip: pet.contact.zip.$t,
     address: pet.contact.address1.$t,
-  }
+  },
 });
 
 export const searchPets = async (params = {}) => {
-  const data = await fetch(`pet.find`, {
+  const data = await fetch('pet.find', {
     queryParams: {
       location: 97206, // default location (location is required by the API)
-      ...params
-    }
+      ...params,
+    },
   });
   return data.petfinder.pets.pet.map(formatInbound);
-}
+};
 
 export const getPet = async (id) => {
-  const data = await fetch(`pet.get`, { queryParams: { id } });
+  const data = await fetch('pet.get', { queryParams: { id } });
   return formatInbound(data.petfinder.pet);
-}
+};

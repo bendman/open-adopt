@@ -8,7 +8,7 @@ const BASE_API_PARAMS = {
 };
 
 // Return GET query string parameters based on an object
-let getQueryString = (obj) => (
+const getQueryString = obj => (
   Object.keys(obj)
         .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
         .join('&')
@@ -17,7 +17,7 @@ let getQueryString = (obj) => (
 // `fetch` with abstraction for API URI and settings
 const apiFetch = async (
   resource,
-  { queryParams, ...settings } = { queryParams: {} }
+  { queryParams, ...settings } = { queryParams: {} },
 ) => {
   // Build GET params, including API required settings
   const finalParams = Object.assign({}, BASE_API_PARAMS, queryParams);
@@ -28,12 +28,12 @@ const apiFetch = async (
   const res = await fetch(finalURL, settings);
 
   // Parse and return response
-  return await res.json();
+  return res.json();
 };
 
 export default apiFetch;
 
 // Expose tested methods
-let _private;
+let _private; // eslint-disable-line import/no-mutable-exports, no-underscore-dangle
 if (process.env.NODE_ENV === 'test') _private = { getQueryString };
 export { _private };
