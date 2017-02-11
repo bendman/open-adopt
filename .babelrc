@@ -1,3 +1,12 @@
 {
-"presets": ["react-native"]
+  "presets": ["react-native-stage-0", "react-native"],
+  "env": {
+    "test": {
+      "plugins": [
+        ["provide-modules", {
+          "node-fetch": "fetch"
+        }]
+      ]
+    }
+  }
 }

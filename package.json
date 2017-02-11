@@ -4,20 +4,29 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "NODE_ENV=test && jest"
   },
+  "pre-commit": ["test"],
   "dependencies": {
+    "babel-preset-react-native-stage-0": "^1.0.1",
+    "jest-react-native": "^18.0.0",
+    "pre-commit": "^1.2.2",
     "react": "~15.4.0",
     "react-native": "0.41.2"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
+    "babel-plugin-provide-modules": "^1.0.3",
     "babel-preset-react-native": "1.9.1",
     "jest": "18.1.0",
+    "node-fetch": "^1.6.3",
     "react-test-renderer": "~15.4.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "jest-react-native"
+  },
+  "react-native": {
+    "node-fetch": false
   },
   "description": "An open source pet adoption application built with React Native.",
   "main": "index.ios.js",
