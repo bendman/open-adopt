@@ -1,5 +1,4 @@
 import fetch from './fetch';
-import { PETFINDER_KEY } from '../env.secret';
 
 const formatInbound = (json) => json.petfinder.breeds.breed.map(breed => breed.$t);
 
