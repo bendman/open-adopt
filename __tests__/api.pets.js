@@ -9,7 +9,6 @@ const petModel = (
     size: expect.any(String),
     species: expect.any(String),
     breeds: expect.arrayContaining([expect.any(String)]),
-    contact: expect.any(Object),
     // TODO: values within contact are optional, but jest doesn't
     // appear ready for model-based assertions.  This should be good enough
     // for now.
@@ -23,6 +22,13 @@ const petModel = (
     //   zip: expect.any(String),
     //   address: expect.any(String),
     // }),
+    contact: expect.any(Object),
+    photos: expect.arrayContaining([
+      expect.objectContaining({
+        small: expect.any(String),
+        large: expect.any(String),
+      }),
+    ]),
   })
 );
 

@@ -1,5 +1,6 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
   "plugins": [
     "react"
   ],
@@ -9,10 +10,25 @@
   "ecmaFeatures": {
     "jsx": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".android.js",
+          ".ios.js"
+        ]
+      }
+    }
+  },
   "rules": {
     "import/prefer-default-export": 0,
     "react/prefer-stateless-function": 0,
     "no-use-before-define": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "global-require": 0,
+    "react/jsx-boolean-value": 0,
+    "react/require-default-props": 0,
+    "react/no-unused-prop-types": 1,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   }
 }

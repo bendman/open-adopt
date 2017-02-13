@@ -13,9 +13,12 @@
   ],
   "dependencies": {
     "babel-preset-react-native-stage-0": "^1.0.1",
-    "jest-react-native": "^18.0.0",
     "react": "~15.4.0",
-    "react-native": "0.41.2"
+    "react-native": "0.41.2",
+    "react-native-blur": "^2.0.0",
+    "react-native-linear-gradient": "^2.0.0",
+    "react-native-router-flux": "^3.37.0",
+    "react-native-vector-icons": "^4.0.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
@@ -33,7 +36,11 @@
     "react-test-renderer": "~15.4.0"
   },
   "jest": {
-    "preset": "jest-react-native"
+    "preset": "react-native",
+    "testRegex": "./__tests__/[^setup].*.js$",
+    "setupFiles": [
+      "./__tests__/setup.js"
+    ]
   },
   "react-native": {
     "node-fetch": false
