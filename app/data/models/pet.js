@@ -10,6 +10,8 @@ const PET_AGES = ['Baby', 'Young', 'Adult', 'Senior'];
 const PET_SIZES = ['Small', 'Medium', 'Large', 'Extra Large'];
 const PET_SPECIES = ['dog', 'cat'];
 
+export const PetSpeciesModel = PropTypes.oneOf(PET_SPECIES);
+
 // PropTypes Models
 const PetModel = PropTypes.shape({
   id: PropTypes.string.isRequired,
@@ -17,7 +19,7 @@ const PetModel = PropTypes.shape({
   sex: PropTypes.oneOf(PET_SEXES),
   age: PropTypes.oneOf(PET_AGES),
   size: PropTypes.oneOf(PET_SIZES),
-  species: PropTypes.oneOf(PET_SPECIES),
+  species: PetSpeciesModel,
   breeds: PropTypes.arrayOf(PropTypes.string),
   contact: PropTypes.shape({
     phone: PropTypes.string,

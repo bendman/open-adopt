@@ -17,13 +17,23 @@ const SUPPORTED_PET_SIZES = {
   XL: 'Extra Large',
 };
 
+const SUPPORTED_PET_SEXES = {
+  M: 'Male',
+  F: 'Female',
+};
+
+const SUPPORTED_PET_SPECIES = {
+  Dog: 'dog',
+  Cat: 'cat',
+};
+
 const formatInbound = pet => ({
   id: pet.id.$t,
   name: pet.name.$t,
-  sex: pet.sex.$t,
+  sex: SUPPORTED_PET_SEXES[pet.sex.$t],
   age: pet.age.$t,
   size: SUPPORTED_PET_SIZES[pet.size.$t],
-  species: pet.animal.$t,
+  species: SUPPORTED_PET_SPECIES[pet.animal.$t],
   // Breeds are returned as either an array or just a single breed object so
   // ensure these are always an array
   breeds: Array.isArray(pet.breeds.breed)
@@ -51,17 +61,23 @@ const formatInbound = pet => ({
   }, []),
 });
 
+const formatSearchParams = params => ({
+  location: params.location || 97206, // default location (location is required by the API
+  animal: params.species,
+});
+
 export const searchPets = async (params = {}) => {
-  const data = await fetch('pet.find', {
-    queryParams: {
-      location: 97206, // default location (location is required by the API)
-      ...params,
-    },
+  const { data, ...res } = await fetch('pet.find', {
+    queryParams: formatSearchParams(params),
   });
-  return data.petfinder.pets.pet.map(formatInbound);
+
+  return {
+    ...res,
+    data: data.petfinder.pets.pet.map(formatInbound),
+  };
 };
 
 export const getPet = async (id) => {
-  const data = await fetch('pet.get', { queryParams: { id } });
-  return formatInbound(data.petfinder.pet);
+  const { res, data } = await fetch('pet.get', { queryParams: { id } });
+  return { ...res, data: formatInbound(data.petfinder.pet) };
 };

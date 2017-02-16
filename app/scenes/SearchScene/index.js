@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image, ListView } from 'react-native';
+import { connect } from 'react-redux';
 import { Actions, NavBar } from 'react-native-router-flux';
+import { Actions as PetActions } from '../../data/petSearch';
 import styles from './styles';
 
-import PetModel, { mocks } from '../../data/models/pet';
+import PetModel, { PetSpeciesModel } from '../../data/models/pet';
 
 const renderRow = pet => (
   <View style={styles.resultsItem}>
@@ -22,19 +24,20 @@ const renderRow = pet => (
 );
 
 
-export default class Search extends Component {
+class Search extends Component {
   static propTypes = {
     // eslint-disable-next-line react/no-unused-prop-types
-    animal: PropTypes.oneOf(['dog', 'cat']).isRequired,
+    species: PetSpeciesModel.isRequired,
     results: PropTypes.arrayOf(PetModel),
+    doSearch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    results: mocks.petList,
+    results: [],
   };
 
   static getTitle(props) {
-    switch (props.animal) {
+    switch (props.species) {
       case 'cat':
         return 'Find a Cat';
       case 'dog':
@@ -50,17 +53,30 @@ export default class Search extends Component {
         {...passedProps}
         getTitle={Search.getTitle}
         rightTitle="Filter"
-        onRight={() => Actions.petFilters()}
+        onRight={() => Actions.petFilters({ species: passedProps.species })}
       />
     );
   }
 
   constructor(...args) {
     super(...args);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1.id !== r2.id });
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1.id !== r2.id,
+    });
+
     this.state = {
       dataSource: ds.cloneWithRows(this.props.results),
     };
+  }
+
+  componentWillMount() {
+    if (!this.props.results.length) this.props.doSearch();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.results),
+    });
   }
 
   render() {
@@ -70,8 +86,18 @@ export default class Search extends Component {
           contentContainerStyle={styles.resultsContainer}
           dataSource={this.state.dataSource}
           renderRow={renderRow}
+          enableEmptySections
         />
       </View>
     );
   }
 }
+
+export default connect(
+  (state, props) => ({
+    results: state.petSearch[props.species].results,
+  }),
+  (dispatch, props) => ({
+    doSearch: () => dispatch(PetActions.searchRequest({ species: props.species })),
+  }),
+)(Search);

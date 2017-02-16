@@ -1,8 +1,5 @@
 import { StyleSheet } from 'react-native';
-import applicationStyles, {
-  NAV_BAR_HEIGHT,
-  STATUS_BAR_HEIGHT,
-} from '../../theme/application-styles';
+import applicationStyles, { NAV_BAR_HEIGHT } from '../../theme/application-styles';
 
 export default StyleSheet.create({
   ...applicationStyles,
@@ -21,7 +18,7 @@ export default StyleSheet.create({
 
   topBar: {
     alignSelf: 'stretch',
-    height: NAV_BAR_HEIGHT - STATUS_BAR_HEIGHT,
+    height: NAV_BAR_HEIGHT,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',

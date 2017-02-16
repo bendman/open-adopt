@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { View, TouchableOpacity, Text, Modal } from 'react-native';
+import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BlurView from '../../components/BlurView';
 import InputLocation from '../../components/InputLocation';
 import InputToggles from '../../components/InputToggles';
+import { Actions as PetActions } from '../../data/petSearch';
+import { PetSpeciesModel } from '../../data/models/pet';
 import styles from './styles';
 
-export default class PetFilters extends Component {
-  static propTypes = {};
+class PetFilters extends Component {
+  static propTypes = {
+    species: PetSpeciesModel.isRequired,
+    setFilters: PropTypes.func.isRequired,
+  };
 
   static defaultProps = {};
 
@@ -35,11 +41,18 @@ export default class PetFilters extends Component {
   onChangeAge = ages => this.setState({ ages });
   onChangeSex = sexes => this.setState({ sexes });
 
+  close = () => {
+    this.props.setFilters({
+      species: this.props.species,
+    });
+    Actions.pop();
+  }
+
   render() {
     return (
       <Modal
         isOpen={this.state.isOpen}
-        onRequestClose={Actions.pop}
+        onRequestClose={this.close}
         animationType="slide"
         style={styles.modalWrapper}
         transparent={true}
@@ -47,7 +60,7 @@ export default class PetFilters extends Component {
         <BlurView style={[styles.mainContainer__noNav, styles.modalContent]}>
           <View style={styles.topBar}>
             <TouchableOpacity
-              onPress={Actions.pop}
+              onPress={this.close}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
             >
               <Icon style={styles.icon} name="close" size={24} color="rgba(0, 0, 0, 0.5)" />
@@ -91,3 +104,10 @@ export default class PetFilters extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  dispatch => ({
+    setFilters: filters => dispatch(PetActions.searchRequest(filters)),
+  }),
+)(PetFilters);

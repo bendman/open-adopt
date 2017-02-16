@@ -4,8 +4,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import styles from './styles';
 
-const searchDogs = () => Actions.search({ animal: 'dog' });
-const searchCats = () => Actions.search({ animal: 'cat' });
+const searchDogs = () => Actions.search({ species: 'dog' });
+const searchCats = () => Actions.search({ species: 'cat' });
 
 export default class Home extends Component {
   constructor(...args) {

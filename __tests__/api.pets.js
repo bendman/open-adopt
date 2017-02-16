@@ -40,16 +40,16 @@ const validatePet = pet => expect(pet).toEqual(petModel);
 
 describe('searchPets', () => {
   it('returns a list of pets when searching', async () => {
-    const pets = await searchPets();
+    const { data: pets } = await searchPets();
     validatePets(pets);
   });
 
   it('accepts query parameters', async () => {
     // Verify that query parameters are accepted and results actually change
-    const cats = await searchPets({ animal: 'cat' });
+    const { data: cats } = await searchPets({ species: 'cat' });
     cats.forEach(pet => expect(pet.species.toLowerCase()).toBe('cat'));
 
-    const dogs = await searchPets({ animal: 'dog' });
+    const { data: dogs } = await searchPets({ species: 'dog' });
     dogs.forEach(pet => expect(pet.species.toLowerCase()).toBe('dog'));
   });
 });
@@ -57,8 +57,8 @@ describe('searchPets', () => {
 describe('getPet', () => {
   it('returns a valid pet', async () => {
     // Grab some pets
-    const pets = await searchPets();
-    const pet = await getPet(pets[0].id);
+    const { data: pets } = await searchPets();
+    const { data: pet } = await getPet(pets[0].id);
     validatePet(pet);
   });
 });

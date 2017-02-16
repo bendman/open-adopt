@@ -10,6 +10,7 @@ const BASE_API_PARAMS = {
 // Return GET query string parameters based on an object
 const getQueryString = obj => (
   Object.keys(obj)
+        .filter(key => !!obj[key]) // filter out empty values
         .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
         .join('&')
 );
@@ -19,16 +20,26 @@ const apiFetch = async (
   resource,
   { queryParams, ...settings } = { queryParams: {} },
 ) => {
+  // these are used in both the try and catch
+  let res;
+  let data;
+
   // Build GET params, including API required settings
   const finalParams = Object.assign({}, BASE_API_PARAMS, queryParams);
   const queryString = getQueryString(finalParams);
 
   // Construct URL and call resource
   const finalURL = `${PETFINDER_URL}${resource}?${queryString}`;
-  const res = await fetch(finalURL, settings);
+  try {
+    res = await fetch(finalURL, settings);
+    data = await res.json();
 
-  // Parse and return response
-  return res.json();
+    // Parse and return response
+    return { data, res };
+  } catch (error) {
+    console.info({ params: finalParams, url: finalURL, res });
+    return { data, res, error };
+  }
 };
 
 export default apiFetch;
