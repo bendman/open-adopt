@@ -2,17 +2,20 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
 import petSearch, { Types as PetSearchTypes } from './petSearch';
+import petFilters, { Types as PetFiltersTypes } from './petFilters';
 import { petSearchSaga } from './sagas/petSearch';
 
 // Reducers
 const rootReducer = combineReducers({
   petSearch,
+  petFilters,
 });
 
 // Sagas
 const rootSaga = function* rootSaga() {
   yield [
     takeLatest(PetSearchTypes.SEARCH_REQUEST, petSearchSaga),
+    takeLatest(PetFiltersTypes.SET_FILTERS, petSearchSaga),
   ];
 };
 

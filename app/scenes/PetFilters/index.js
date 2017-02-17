@@ -1,3 +1,4 @@
+import R from 'ramda';
 import React, { Component, PropTypes } from 'react';
 import { View, TouchableOpacity, Text, Modal } from 'react-native';
 import { connect } from 'react-redux';
@@ -6,14 +7,33 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import BlurView from '../../components/BlurView';
 import InputLocation from '../../components/InputLocation';
 import InputToggles from '../../components/InputToggles';
-import { Actions as PetActions } from '../../data/petSearch';
+import { Actions as FilterActions } from '../../data/petFilters';
 import { PetSpeciesModel } from '../../data/models/pet';
 import styles from './styles';
+
+const getStateFilters = propFilters => ({
+  location: propFilters.location || 'Portland, OR',
+  sizes: propFilters.sizes || [],
+  ages: propFilters.ages || [],
+  sexes: propFilters.sexes || [],
+});
 
 class PetFilters extends Component {
   static propTypes = {
     species: PetSpeciesModel.isRequired,
-    setFilters: PropTypes.func.isRequired,
+    filters: PropTypes.shape({
+      location: PropTypes.string,
+      sizes: PropTypes.arrayOf(PropTypes.oneOf([
+        'Small', 'Medium', 'Large', 'Extra Large',
+      ])),
+      ages: PropTypes.arrayOf(PropTypes.oneOf([
+        'Baby', 'Young', 'Adult', 'Senior',
+      ])),
+      sexes: PropTypes.arrayOf(PropTypes.oneOf([
+        'Male', 'Female',
+      ])),
+    }),
+    onChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {};
@@ -21,10 +41,8 @@ class PetFilters extends Component {
   constructor(...args) {
     super(...args);
     this.state = {
-      location: 'Portland, OR',
-      sizes: ['Small', 'Medium'],
-      ages: ['Adult'],
-      sexes: ['M', 'F'],
+      isOpen: false,
+      filters: getStateFilters(this.props.filters),
     };
   }
 
@@ -36,14 +54,25 @@ class PetFilters extends Component {
     });
   }
 
-  onChangeLocation = location => this.setState({ location });
-  onChangeSize = sizes => this.setState({ sizes });
-  onChangeAge = ages => this.setState({ ages });
-  onChangeSex = sexes => this.setState({ sexes });
+  componentWillReceiveProps(nextProps) {
+    const nextFilters = getStateFilters(nextProps);
+    if (R.equals(this.state.filters, nextFilters)) {
+      this.setState({ filters: nextFilters });
+    }
+  }
+
+  onChangeLocation = location => this.setState({ filters: { ...this.state.filters, location } });
+  onChangeSize = sizes => this.setState({ filters: { ...this.state.filters, sizes } });
+  onChangeAge = ages => this.setState({ filters: { ...this.state.filters, ages } });
+  onChangeSex = sexes => this.setState({ filters: { ...this.state.filters, sexes } });
 
   close = () => {
-    this.props.setFilters({
+    this.props.onChange({
       species: this.props.species,
+      location: this.state.filters.location,
+      sizes: this.state.filters.sizes,
+      ages: this.state.filters.ages,
+      sexes: this.state.filters.sexes,
     });
     Actions.pop();
   }
@@ -70,7 +99,7 @@ class PetFilters extends Component {
           <Text style={styles.label}>LOCATION</Text>
           <InputLocation
             style={styles.field}
-            value={this.state.location}
+            value={this.state.filters.location}
             onChangeValue={this.onChangeLocation}
           />
 
@@ -79,7 +108,7 @@ class PetFilters extends Component {
             style={[styles.field, styles.pill]}
             options={['S', 'M', 'L', 'XL']}
             values={['Small', 'Medium', 'Large', 'Extra Large']}
-            value={this.state.sizes}
+            value={this.state.filters.sizes}
             onChangeValue={this.onChangeSize}
           />
 
@@ -87,7 +116,7 @@ class PetFilters extends Component {
           <InputToggles
             style={[styles.field, styles.pill]}
             options={['Baby', 'Young', 'Adult', 'Senior']}
-            value={this.state.ages}
+            value={this.state.filters.ages}
             onChangeValue={this.onChangeAge}
           />
 
@@ -95,7 +124,7 @@ class PetFilters extends Component {
           <InputToggles
             style={[styles.field, styles.pill]}
             options={['M', 'F']}
-            value={this.state.sexes}
+            value={this.state.filters.sexes}
             onChangeValue={this.onChangeSex}
           />
 
@@ -106,8 +135,10 @@ class PetFilters extends Component {
 }
 
 export default connect(
-  null,
+  (state, props) => ({
+    filters: state.petFilters[props.species],
+  }),
   dispatch => ({
-    setFilters: filters => dispatch(PetActions.searchRequest(filters)),
+    onChange: filters => dispatch(FilterActions.setFilters(filters)),
   }),
 )(PetFilters);

@@ -70,13 +70,27 @@ class Search extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.results.length) this.props.doSearch();
+    this.loadInitialResults();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.results),
-    });
+    if (nextProps.results !== this.props.results) {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(nextProps.results),
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // If we change the results page to a difference species, load results for
+    // that species
+    if (this.props.species !== prevProps.species) {
+      this.loadInitialResults();
+    }
+  }
+
+  loadInitialResults() {
+    if (!this.props.results.length) this.props.doSearch();
   }
 
   render() {

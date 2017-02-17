@@ -1,5 +1,6 @@
 import Immutable from 'seamless-immutable';
 import { createReducer, createActions } from 'reduxsauce';
+import { Types as FiltersTypes } from './petFilters';
 
 
 // Action Types and Action Creators
@@ -26,6 +27,7 @@ const setLoading = (state, { filters: { species } }) =>
   state.merge({ [species]: { isLoading: true } });
 
 export default createReducer(INITIAL_STATE, {
+  [FiltersTypes.SET_FILTERS]: setLoading,
   [Types.SEARCH_REQUEST]: setLoading,
   [Types.SEARCH_SUCCESS]: setResults,
 });
