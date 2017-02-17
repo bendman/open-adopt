@@ -1,3 +1,4 @@
+import R from 'ramda';
 import fetch from './fetch';
 
 const SUPPORTED_PHOTO_SIZES = {
@@ -64,6 +65,9 @@ const formatInbound = pet => ({
 const formatSearchParams = params => ({
   location: params.location || 97206, // default location (location is required by the API
   animal: params.species,
+  sex: (params.sexes && params.sexes.length === 1)
+    ? params.sexes[0].charAt(0) // M/F
+    : null,
 });
 
 export const searchPets = async (params = {}) => {
@@ -73,7 +77,10 @@ export const searchPets = async (params = {}) => {
 
   return {
     ...res,
-    data: data.petfinder.pets.pet.map(formatInbound),
+    data: data.petfinder.pets.pet
+      // Until we have a placeholder image, filter out pets with no media
+      .filter(pet => !!R.path(['media', 'photos', 'photo'], pet))
+      .map(formatInbound),
   };
 };
 

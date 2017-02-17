@@ -124,6 +124,7 @@ class PetFilters extends Component {
           <InputToggles
             style={[styles.field, styles.pill]}
             options={['M', 'F']}
+            values={['Male', 'Female']}
             value={this.state.filters.sexes}
             onChangeValue={this.onChangeSex}
           />

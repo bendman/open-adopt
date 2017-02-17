@@ -23,14 +23,17 @@ const apiFetch = async (
   // these are used in both the try and catch
   let res;
   let data;
+  let finalParams;
+  let finalURL;
 
-  // Build GET params, including API required settings
-  const finalParams = Object.assign({}, BASE_API_PARAMS, queryParams);
-  const queryString = getQueryString(finalParams);
-
-  // Construct URL and call resource
-  const finalURL = `${PETFINDER_URL}${resource}?${queryString}`;
   try {
+    // Build GET params, including API required settings
+    finalParams = Object.assign({}, BASE_API_PARAMS, queryParams);
+    const queryString = getQueryString(finalParams);
+
+    // Construct URL and call resource
+    finalURL = `${PETFINDER_URL}${resource}?${queryString}`;
+
     res = await fetch(finalURL, settings);
     data = await res.json();
 
