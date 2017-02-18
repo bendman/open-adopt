@@ -18,6 +18,10 @@ const SUPPORTED_PET_SIZES = {
   XL: 'Extra Large',
 };
 
+const SUPPORTED_PET_AGES = [
+  'Baby', 'Young', 'Adult', 'Senior',
+];
+
 const SUPPORTED_PET_SEXES = {
   M: 'Male',
   F: 'Female',
@@ -48,7 +52,7 @@ const formatInbound = pet => ({
     zip: pet.contact.zip.$t,
     address: pet.contact.address1.$t,
   },
-  photos: pet.media.photos.photo.reduce((photos, photo) => {
+  photos: pet.media.photos ? pet.media.photos.photo.reduce((photos, photo) => {
     // Only include photos in supported sizes
     const size = SUPPORTED_PHOTO_SIZES[photo['@size']];
     if (!size) return photos;
@@ -59,28 +63,62 @@ const formatInbound = pet => ({
     const index = parseInt(photo['@id'], 10) - 1;
     updated[index] = Object.assign({}, updated[index], { [size]: photo.$t });
     return updated;
-  }, []),
+  }, []) : [],
 });
 
 const formatSearchParams = params => ({
+  count: params.count,
   location: params.location || 97206, // default location (location is required by the API
   animal: params.species,
   sex: (params.sexes && params.sexes.length === 1)
     ? params.sexes[0].charAt(0) // M/F
     : null,
+  size: (params.sizes && params.sizes.length === 1)
+    ? R.invertObj(SUPPORTED_PET_SIZES)[params.sizes[0]]
+    : null,
+  age: (params.ages && params.ages.length === 1)
+    ? params.ages[0]
+    : null,
 });
 
+// One value can be filtered with the API
+// All or no values means no filter
+const useClientFilter = (filter, numSupportedValues) => !!(
+  filter &&
+  filter.length > 1 &&
+  filter.length < numSupportedValues
+);
+
+
 export const searchPets = async (params = {}) => {
+  // The API doesn't offer multiselect filtering, so filter in the client
+  // rather than via the API.
+  const sizesFilter = useClientFilter(params.sizes, Object.keys(SUPPORTED_PET_SIZES).length);
+  const agesFilter = useClientFilter(params.ages, SUPPORTED_PET_AGES.length);
+
   const { data, ...res } = await fetch('pet.find', {
-    queryParams: formatSearchParams(params),
+    queryParams: formatSearchParams({
+      ...params,
+      // If a multiselect triggers client filtering, request more results
+      count: sizesFilter || agesFilter ? 1000 : 50,
+    }),
   });
+
+  const filteredPets = data.petfinder.pets.pet
+    // Format them first. It's a bit slower, but we don't need to mess with the
+    // API specific formatting in filters
+    .map(formatInbound)
+    .filter(pet => (
+      (!sizesFilter || params.sizes.includes(pet.size)) &&
+      (!agesFilter || params.ages.includes(pet.age)) &&
+      // Until we have a placeholder image, filter out pets with no media
+      pet.photos.length
+    ))
+    .slice(0, 50);
 
   return {
     ...res,
-    data: data.petfinder.pets.pet
-      // Until we have a placeholder image, filter out pets with no media
-      .filter(pet => !!R.path(['media', 'photos', 'photo'], pet))
-      .map(formatInbound),
+    data: filteredPets,
   };
 };
 
