@@ -44,6 +44,7 @@ const formatInbound = pet => ({
   breeds: Array.isArray(pet.breeds.breed)
     ? pet.breeds.breed.map(breed => breed.$t)
     : [pet.breeds.breed.$t],
+  description: decodeURIComponent(escape(pet.description.$t)),
   contact: {
     phone: pet.contact.phone.$t,
     email: pet.contact.email.$t,
@@ -51,6 +52,7 @@ const formatInbound = pet => ({
     city: pet.contact.city.$t,
     zip: pet.contact.zip.$t,
     address: pet.contact.address1.$t,
+    address2: pet.contact.address2.$t,
   },
   photos: pet.media.photos ? pet.media.photos.photo.reduce((photos, photo) => {
     // Only include photos in supported sizes

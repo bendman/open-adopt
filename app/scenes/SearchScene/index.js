@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image, ListView } from 'react-native';
+import { View, Text, Image, ListView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, NavBar } from 'react-native-router-flux';
 import { Actions as PetActions } from '../../data/petSearch';
@@ -8,7 +8,10 @@ import styles from './styles';
 import PetModel, { PetSpeciesModel } from '../../data/models/pet';
 
 const renderRow = pet => (
-  <View style={styles.resultsItem}>
+  <TouchableOpacity
+    style={styles.resultsItem}
+    onPress={() => Actions.profile({ species: pet.species, id: pet.id })}
+  >
     <View style={styles.resultsItem_imageWrapper} elevation={2}>
       <Image source={{ uri: pet.photos[0].small }} style={styles.resultsItem_image} />
     </View>
@@ -20,7 +23,7 @@ const renderRow = pet => (
         {pet.size === 'Extra Large' ? 'XL' : pet.size} / {pet.age} / {pet.sex}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 

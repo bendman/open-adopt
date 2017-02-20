@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
-import applicationStyles, { NAV_BAR_HEIGHT } from '../../theme/application-styles';
+import applicationStyles, { NAV_BAR_HEIGHT, HOT_COLOR } from '../../theme/application-styles';
+
+export { HOT_COLOR };
 
 export default StyleSheet.create({
   ...applicationStyles,

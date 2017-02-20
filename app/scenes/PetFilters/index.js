@@ -9,7 +9,7 @@ import InputLocation from '../../components/InputLocation';
 import InputToggles from '../../components/InputToggles';
 import { Actions as FilterActions } from '../../data/petFilters';
 import { PetSpeciesModel } from '../../data/models/pet';
-import styles from './styles';
+import styles, { HOT_COLOR } from './styles';
 
 const getStateFilters = propFilters => ({
   location: propFilters.location || 'Portland, OR',
@@ -92,7 +92,7 @@ class PetFilters extends Component {
               onPress={this.close}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
             >
-              <Icon style={styles.icon} name="close" size={24} color="rgba(0, 0, 0, 0.5)" />
+              <Icon style={styles.icon} name="close" size={24} color={HOT_COLOR} />
             </TouchableOpacity>
           </View>
 

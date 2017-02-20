@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { INPUT_HEIGHT, INPUT_FONT_SIZE } from '../../theme/application-styles';
+import { INPUT_HEIGHT, INPUT_FONT_SIZE, HOT_COLOR } from '../../theme/application-styles';
 
 const styles = StyleSheet.create({
   root: {
@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'stretch',
     borderWidth: 1,
-    borderColor: 'red',
+    borderColor: HOT_COLOR,
     borderRadius: INPUT_HEIGHT / 2,
   },
 
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
 
   option__active: {
-    backgroundColor: 'red',
+    backgroundColor: HOT_COLOR,
   },
 
   option__first: {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    color: 'red',
+    color: HOT_COLOR,
     fontSize: INPUT_FONT_SIZE,
   },
 

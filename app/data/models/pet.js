@@ -28,6 +28,7 @@ const PetModel = PropTypes.shape({
     city: PropTypes.string,
     zip: PropTypes.string,
     address: PropTypes.string,
+    address2: PropTypes.string,
   }),
   photos: PropTypes.arrayOf(PhotoModel),
 });
