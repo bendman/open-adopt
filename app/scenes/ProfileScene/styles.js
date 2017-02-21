@@ -107,4 +107,9 @@ export default StyleSheet.create({
     width: AVATAR_SIZE,
     marginHorizontal: 2,
   },
+
+  attribution: {
+    marginTop: 40,
+    color: '#bfbfbf',
+  },
 });

@@ -59,6 +59,7 @@ class Search extends Component {
 
   linkPhone = () => openURL(`tel:${this.props.profile.contact.phone.replace(/\D+/g, '')}`);
   linkEmail = () => openURL(`mailto:${this.props.profile.contact.email}`);
+  linkAttribution = () => openURL('https://www.petfinder.com/');
 
   renderHero() {
     const bgPhoto = this.getHeroImage();
@@ -137,6 +138,9 @@ class Search extends Component {
               <Text onPress={this.linkEmail} style={labelStyles.value}>{contact.email}</Text>
             )}
           </View>
+          <Text onPress={this.linkAttribution} style={styles.attribution}>
+            Powered by Petfinder
+          </Text>
         </View>
       </ScrollView>
     );
