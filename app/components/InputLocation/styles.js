@@ -15,11 +15,16 @@ const styles = StyleSheet.create({
     margin: 8,
   },
 
+  icon_wrapper: {
+    position: 'relative',
+    zIndex: 2,
+  },
+
   input: {
     height: INPUT_HEIGHT,
     position: 'absolute',
-    left: 0,
-    right: 0,
+    left: 34,
+    right: 34,
     top: 0,
     bottom: 0,
     color: '#666',

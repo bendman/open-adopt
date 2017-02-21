@@ -1,24 +1,36 @@
-import React, { PropTypes } from 'react';
-import { View, TextInput } from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getLocation } from '../../utils/geolocation';
 import styles from './styles';
 
-const InputLocation = ({ style, value, onChangeValue }) => (
-  <View style={[styles.root, style]}>
-    <Icon style={styles.icon} name="location-searching" size={20} color="rgba(0, 0, 0, 0.4)" />
-    <TextInput
-      style={styles.input}
-      value={value}
-      onChangeText={onChangeValue}
-      underlineColorAndroid="transparent"
-    />
-  </View>
-);
+class InputLocation extends Component {
+  static propTypes = {
+    style: View.propTypes.style,
+    value: PropTypes.string.isRequired,
+    onChangeValue: PropTypes.func.isRequired,
+  };
 
-InputLocation.propTypes = {
-  style: View.propTypes.style,
-  value: PropTypes.string.isRequired,
-  onChangeValue: PropTypes.func.isRequired,
-};
+  useLocation = async () => {
+    const location = await getLocation();
+    this.props.onChangeValue(location);
+  }
+
+  render() {
+    return (
+      <View style={[styles.root, this.props.style]}>
+        <TouchableOpacity onPress={this.useLocation} style={styles.icon_wrapper}>
+          <Icon style={styles.icon} name="location-searching" size={20} color="rgba(0, 0, 0, 0.4)" />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          value={this.props.value}
+          onChangeText={this.props.onChangeValue}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+    );
+  }
+}
 
 export default InputLocation;
