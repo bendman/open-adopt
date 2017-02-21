@@ -106,6 +106,10 @@ export const searchPets = async (params = {}) => {
     }),
   });
 
+  // No results
+  if (!data.petfinder.pets) return { ...res, data: [] };
+
+  // Format results
   const filteredPets = data.petfinder.pets.pet
     // Format them first. It's a bit slower, but we don't need to mess with the
     // API specific formatting in filters
