@@ -5,8 +5,9 @@ const DIMS = Dimensions.get('window');
 const AVATAR_SIZE = 150;
 const AVATAR_OFFSET = 160;
 
+export { HOT_COLOR };
 export const MAX_HERO_HEIGHT = DIMS.height - AVATAR_SIZE - NAV_BAR_HEIGHT;
-export const MIN_HERO_HEIGHT = AVATAR_SIZE;
+export const MIN_HERO_HEIGHT = AVATAR_SIZE + 20;
 export const HERO_WIDTH = DIMS.width;
 
 export default StyleSheet.create({

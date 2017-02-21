@@ -1,6 +1,6 @@
 import R from 'ramda';
 import React, { Component, PropTypes } from 'react';
-import { View, ScrollView, Text, Image } from 'react-native';
+import { View, ScrollView, Text, Image, Linking } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import styles, {
@@ -14,6 +14,11 @@ import PetModel, { PetSpeciesModel } from '../../data/models/pet';
 
 // Curried function to clamp the hero height between the min and max
 const clampHeroHeight = R.clamp(MIN_HERO_HEIGHT, MAX_HERO_HEIGHT);
+
+const openURL = async (url) => {
+  if (await Linking.canOpenURL(url)) Linking.openURL(url);
+  else console.warn(`Couldn't open url (${url})`);
+};
 
 class Search extends Component {
   static propTypes = {
@@ -52,6 +57,9 @@ class Search extends Component {
       : null;
   }
 
+  linkPhone = () => openURL(`tel:${this.props.profile.contact.phone.replace(/\D+/g, '')}`);
+  linkEmail = () => openURL(`mailto:${this.props.profile.contact.email}`);
+
   renderHero() {
     const bgPhoto = this.getHeroImage();
     if (bgPhoto) {
@@ -60,7 +68,6 @@ class Search extends Component {
         <View
           style={[styles.hero, {
             height: this.state.heroHeight,
-            opacity: this.state.loadingHero ? 0 : 1,
           }]}
         >
           <Image style={styles.hero_image} source={{ uri: bgPhoto.large }}>
@@ -100,7 +107,7 @@ class Search extends Component {
   render() {
     const { contact, ...profile } = this.props.profile;
     return (
-      <ScrollView style={styles.mainContainer}>
+      <ScrollView style={[styles.mainContainer, { opacity: this.state.loadingHero ? 0 : 1 }]}>
         {this.renderHero()}
         <View style={styles.avatar_wrapper}>
           <Text style={styles.name}>{this.props.profile.name}</Text>
@@ -118,13 +125,17 @@ class Search extends Component {
           {this.renderGallery()}
           <View style={styles.contact}>
             <Text style={labelStyles.label}>Contact</Text>
-            {!contact.phone ? null : <Text style={labelStyles.value}>{contact.phone}</Text>}
+            {!contact.phone ? null : (
+              <Text onPress={this.linkPhone} style={labelStyles.value}>{contact.phone}</Text>
+            )}
             {!contact.address ? null : <Text style={labelStyles.value}>{contact.address}</Text>}
             {!contact.address2 ? null : <Text style={labelStyles.value}>{contact.address2}</Text>}
             <Text style={labelStyles.value}>
               {contact.city}, {contact.state} {contact.zip}
             </Text>
-            {!contact.email ? null : <Text style={labelStyles.value}>{contact.email}</Text>}
+            {!contact.email ? null : (
+              <Text onPress={this.linkEmail} style={labelStyles.value}>{contact.email}</Text>
+            )}
           </View>
         </View>
       </ScrollView>
