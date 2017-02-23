@@ -1,12 +1,13 @@
 import R from 'ramda';
 import React, { Component, PropTypes } from 'react';
-import { View, TouchableOpacity, Text, Modal } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BlurView from '../../components/BlurView';
 import InputLocation from '../../components/InputLocation';
 import InputToggles from '../../components/InputToggles';
+import Button from '../../components/Button';
 import { Actions as FilterActions } from '../../data/petFilters';
 import { PetSpeciesModel } from '../../data/models/pet';
 import styles, { HOT_COLOR } from './styles';
@@ -86,49 +87,61 @@ class PetFilters extends Component {
         style={styles.modalWrapper}
         transparent={true}
       >
-        <BlurView style={[styles.mainContainer__noNav, styles.modalContent]}>
-          <View style={styles.topBar}>
-            <TouchableOpacity
-              onPress={this.close}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
-            >
-              <Icon style={styles.icon} name="close" size={24} color={HOT_COLOR} />
-            </TouchableOpacity>
-          </View>
+        <BlurView style={styles.modalWrapper}>
+          <ScrollView
+            style={[styles.mainContainer__full]}
+            contentContainerStyle={[styles.mainContainer__noNav, styles.scrollContent]}
+          >
+            <View style={styles.splitContent}>
 
-          <Text style={styles.label}>LOCATION</Text>
-          <InputLocation
-            style={styles.field}
-            value={this.state.filters.location}
-            onChangeValue={this.onChangeLocation}
-          />
+              <View style={styles.topBar}>
+                <TouchableOpacity
+                  onPress={this.close}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
+                >
+                  <Icon style={styles.icon} name="close" size={24} color={HOT_COLOR} />
+                </TouchableOpacity>
+              </View>
 
-          <Text style={styles.label}>SIZE</Text>
-          <InputToggles
-            style={[styles.field, styles.pill]}
-            options={['S', 'M', 'L', 'XL']}
-            values={['Small', 'Medium', 'Large', 'Extra Large']}
-            value={this.state.filters.sizes}
-            onChangeValue={this.onChangeSize}
-          />
+              <Text style={styles.label}>LOCATION</Text>
+              <InputLocation
+                style={styles.field}
+                value={this.state.filters.location}
+                onChangeValue={this.onChangeLocation}
+              />
 
-          <Text style={styles.label}>AGE</Text>
-          <InputToggles
-            style={[styles.field, styles.pill]}
-            options={['Baby', 'Young', 'Adult', 'Senior']}
-            value={this.state.filters.ages}
-            onChangeValue={this.onChangeAge}
-          />
+              <Text style={styles.label}>SIZE</Text>
+              <InputToggles
+                style={[styles.field, styles.pill]}
+                options={['S', 'M', 'L', 'XL']}
+                values={['Small', 'Medium', 'Large', 'Extra Large']}
+                value={this.state.filters.sizes}
+                onChangeValue={this.onChangeSize}
+              />
 
-          <Text style={styles.label}>GENDER</Text>
-          <InputToggles
-            style={[styles.field, styles.pill]}
-            options={['M', 'F']}
-            values={['Male', 'Female']}
-            value={this.state.filters.sexes}
-            onChangeValue={this.onChangeSex}
-          />
+              <Text style={styles.label}>AGE</Text>
+              <InputToggles
+                style={[styles.field, styles.pill]}
+                options={['Baby', 'Young', 'Adult', 'Senior']}
+                value={this.state.filters.ages}
+                onChangeValue={this.onChangeAge}
+              />
 
+              <Text style={styles.label}>GENDER</Text>
+              <InputToggles
+                style={[styles.field, styles.pill]}
+                options={['M', 'F']}
+                values={['Male', 'Female']}
+                value={this.state.filters.sexes}
+                onChangeValue={this.onChangeSex}
+              />
+            </View>
+
+            <View style={styles.splitActions}>
+              <Button onPress={this.close} title="Search" />
+            </View>
+
+          </ScrollView>
         </BlurView>
       </Modal>
     );

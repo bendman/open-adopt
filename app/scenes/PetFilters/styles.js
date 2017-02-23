@@ -3,6 +3,8 @@ import applicationStyles, { NAV_BAR_HEIGHT, HOT_COLOR } from '../../theme/applic
 
 export { HOT_COLOR };
 
+const MODAL_PADDING = 20;
+
 export default StyleSheet.create({
   ...applicationStyles,
 
@@ -14,8 +16,22 @@ export default StyleSheet.create({
     flex: 1,
   },
 
-  modalContent: {
+  scrollWrapper: {
+    flex: 1,
+  },
+
+  scrollContent: {
+    justifyContent: 'space-between',
+    flexGrow: 1,
+  },
+
+  splitContent: {
     alignItems: 'center',
+    flexGrow: 1,
+  },
+
+  splitActions: {
+    padding: MODAL_PADDING,
   },
 
   topBar: {
@@ -33,7 +49,7 @@ export default StyleSheet.create({
 
   field: {
     marginBottom: 40,
-    marginHorizontal: 20,
+    marginHorizontal: MODAL_PADDING,
     alignSelf: 'stretch',
   },
 
