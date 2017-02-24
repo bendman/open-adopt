@@ -4,8 +4,8 @@ An open source mobile application for pet adoption and to demonstrate React Nati
 
 ## Try it out
 
-<a href='https://play.google.com/store/apps/details?id=com.openadopt&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='play-store.svg' height='40' /></a>
-<a href="https://itunes.apple.com/us/app/open-adopt/id1208335615?mt=8"><img alt='Get it on iOS'  src='app-store.svg' height='40' /></a>
+<a href='https://play.google.com/store/apps/details?id=com.openadopt&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='play-store.png' height='40' /></a>
+<a href="https://itunes.apple.com/us/app/open-adopt/id1208335615?mt=8"><img alt='Get it on iOS'  src='app-store.png' height='40' /></a>
 
 ## Getting Started
 
